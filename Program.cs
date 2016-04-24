@@ -31,7 +31,7 @@ namespace MemoryAllocation
 
     class hole:memoryitem
     {
-            public hole(int add, int s) { size = s; starting_add = add; type = "h"; }
+            public hole(int add=0, int s=0) { size = s; starting_add = add; type = "h"; }
             
     };
     class methodology
@@ -39,32 +39,43 @@ namespace MemoryAllocation
         public static void concatenate(List<memoryitem> L)
         {
             List<memoryitem> temp = L;
-            temp.OrderBy(add =>add.getstratingadd());
-            for (int i = 0; i < temp.Count; i++)
+            List<memoryitem> holes = new List<memoryitem>();
+            hole h = new hole(); 
+            foreach (var item in temp)
             {
-                if (temp[i].type == "h")
+                if (item.type == "h")
                 {
-                    int add1 = temp[i].getstratingadd();
-                    int size1 = temp[i].getsize();
-                    int add2 = temp[i + 1].getstratingadd();
-                    int size2 = temp[i + 1].getsize();
-                    if (add1 + size1 == add2)
-                    {
-                        temp[i].setsize(size1 + size2);
-                        temp.Remove(temp[i + 1]);
-                        L = temp;
-                    }
+                    holes.Add(item);
                 }
             }
+            holes.OrderBy(add=>add.getstratingadd());
+            for (int i = 0; i < holes.Count-1; i++)
+            {
+                int size1 = holes[i].getsize();
+                int size2 = holes[i + 1].getsize();
+                int add1 = holes[i].getstratingadd();
+                int add2 = holes[i + 1].getstratingadd();
+                if (add1+size1 == add2)
+                {
+                    L.Remove(holes[i]);
+                    L.Remove(holes[i + 1]);
+                    h.setsize(size1 + size2);
+                    h.setstarting_add(add1);
+                    L.Add(h);
+                }
+            }
+         
+            
+            
         }
-        public static List<memoryitem> memory = new List<memoryitem>();
+        //public static List<memoryitem> memory = new List<memoryitem>();
         public static List<memoryitem> allprocess = new List<memoryitem>();
         
-        public void inserthole(hole hole){
+        public void inserthole(hole hole,List<memoryitem>memory){
             // check holes 
             memory.Add(hole);
         }
-        public static List<memoryitem> FirstFit(process newprocess)
+        public static List<memoryitem> FirstFit(process newprocess, List<memoryitem> memory)
         {
             process nprocess = newprocess;
 
@@ -73,7 +84,7 @@ namespace MemoryAllocation
                 if (item.type == "h")
                 {
                     if (item.size > newprocess.size)
-                    {   
+                    {
                         //get el starting address w el size  
                         int startaddress = item.getstratingadd();
                         int size = item.getsize();
@@ -81,13 +92,14 @@ namespace MemoryAllocation
                         nprocess.setstarting_add(startaddress);
                         memory.Add(nprocess);
                         //add new hole in pos start address+size of process its size equals ( old hole size - new process size)
-                        hole nhole =new hole((startaddress+nprocess.getsize()),(size-nprocess.getsize()));
+                        hole nhole = new hole((startaddress + nprocess.getsize()), (size - nprocess.getsize()));
                         memory.Add(nhole);
                         //delete el hole el adema 
                         memory.Remove(item);
-                        allprocess.Add(nprocess);    
+                        allprocess.Add(nprocess);
                         break;
                     }
+                    //else Console.WriteLine("Process {0} is aded to waiting queue.", nprocess.getname());
                     
                 }
 
@@ -96,13 +108,15 @@ namespace MemoryAllocation
             return memory;
         }
 
-        public static List<memoryitem> BestFit(process newprocess)
+        public static List<memoryitem> BestFit(process newprocess,List<memoryitem>memory)
         {
             process nprocess = newprocess;
             List<memoryitem> temp = memory;
-            temp.OrderBy(a => a.getsize());
+            
             foreach (var item in temp)
             {
+                temp.OrderBy(a => a.getsize());
+
                 if (item.type == "h")
                 {   
                     if (item.size > newprocess.size)
@@ -129,7 +143,7 @@ namespace MemoryAllocation
             return memory;
         }
 
-        public static List<memoryitem> WorstFit(process newprocess)
+        public static List<memoryitem> WorstFit(process newprocess,List<memoryitem>memory)
         {
             process nprocess = newprocess;
             List<memoryitem> temp = memory;
@@ -161,7 +175,7 @@ namespace MemoryAllocation
 
             return memory;
         }
-        public static List<memoryitem> deallocate(string processname)
+        public static List<memoryitem> deallocate(string processname,List<memoryitem>memory)
         {
             string name = processname;
             
@@ -193,27 +207,44 @@ namespace MemoryAllocation
     {
         static void Main(string[] args)
         { 
-            hole h = new hole(1220 , 100);
-            process p = new process("p1", 50);
-            LinkedList<memoryitem> x = new LinkedList<memoryitem>();
-            x.AddLast(h);
-            x.AddLast(p);
-            x.Remove(p);
-            Console.WriteLine("Enter no of processes: ");
-            List<string> list = new List<string>();
-            string xx = Console.ReadLine();
-            int xy = Convert.ToInt32(xx);
-            //Console.Write(xx);
+            hole h1 = new hole(50 , 220);
+            hole h2 = new hole(300, 100);
+            hole h3 = new hole(560, 140);
+            hole h4 = new hole(700, 80);
+            process p1 = new process("p1", 150);
+            process p2 = new process("p2", 130);
+            process p3 = new process("p3", 270);
+            process p4 = new process("p4", 50);
+            process p5 = new process("p5", 180);
+            process p6 = new process("p6", 90);
 
-            for (int i = 0; i < xy; i++)
+            List<memoryitem> x = new List<memoryitem>();
+            x.Add(h1); x.Add(h2); x.Add(h3); x.Add(h4); x.Add(p1); x.Add(p2); x.Add(p3); x.Add(p4); x.Add(p5); x.Add(p6);
+
+            MemoryAllocation.methodology.FirstFit(p1, x);
+            MemoryAllocation.methodology.FirstFit(p2, x);
+            MemoryAllocation.methodology.FirstFit(p3, x);
+            MemoryAllocation.methodology.FirstFit(p4, x);
+            MemoryAllocation.methodology.FirstFit(p5, x);
+            MemoryAllocation.methodology.FirstFit(p6, x);
+            MemoryAllocation.methodology.deallocate("p4", x);
+
+            //MemoryAllocation.methodology.BestFit(p1, x);
+            //MemoryAllocation.methodology.BestFit(p2, x);
+            //MemoryAllocation.methodology.BestFit(p3, x);
+            //MemoryAllocation.methodology.BestFit(p4, x);
+            //MemoryAllocation.methodology.BestFit(p5, x);
+            //MemoryAllocation.methodology.BestFit(p6, x);
+           
+            foreach (var item in x)
             {
-                string f = Console.ReadLine();
-                list.Add(f);
+                Console.Write(item.getstratingadd());
+                Console.WriteLine();
+                Console.Write(item.getsize());
+                Console.WriteLine();
+            
             }
-            for (int i = 0; i < xy; i++)
-            {
-                Console.WriteLine(list.ElementAt(i));
-            }
+
         }
     }
 }
