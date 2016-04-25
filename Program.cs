@@ -91,7 +91,6 @@ namespace MemoryAllocation
                         //add new process in pos (starting address) 
                         nprocess.setstarting_add(startaddress);
                         memory.Add(nprocess);
-                        memory.Remove(newprocess);
                         //add new hole in pos start address+size of process its size equals ( old hole size - new process size)
                         hole nhole = new hole((startaddress + nprocess.getsize()), (size - nprocess.getsize()));
                         memory.Add(nhole);
@@ -128,7 +127,6 @@ namespace MemoryAllocation
                         //add new process in pos (starting address) 
                         nprocess.setstarting_add(startaddress);
                         memory.Add(nprocess);
-                        memory.Remove(newprocess);
                         //add new hole in pos start address+size of process its size equals ( old hole size - new process size)
                         hole nhole = new hole((startaddress + nprocess.getsize()), (size - nprocess.getsize()));
                         memory.Add(nhole);
@@ -163,7 +161,6 @@ namespace MemoryAllocation
                         //add new process in pos (starting address) 
                         nprocess.setstarting_add(startaddress);
                         memory.Add(nprocess);
-                        memory.Remove(newprocess);
                         //add new hole in pos start address+size of process its size equals ( old hole size - new process size)
                         hole nhole = new hole((startaddress + nprocess.getsize()), (size - nprocess.getsize()));
                         memory.Add(nhole);
@@ -219,7 +216,7 @@ namespace MemoryAllocation
             process p6 = new process("p6", 90);
 
             List<memoryitem> x = new List<memoryitem>();
-            x.Add(h1); x.Add(h2); x.Add(h3); x.Add(h4); x.Add(p1); x.Add(p2); x.Add(p3); x.Add(p4); x.Add(p5); x.Add(p6);
+            x.Add(h1); x.Add(h2); x.Add(h3); x.Add(h4); 
 
             //MemoryAllocation.methodology.FirstFit(p1, x);
             //MemoryAllocation.methodology.FirstFit(p2, x);
