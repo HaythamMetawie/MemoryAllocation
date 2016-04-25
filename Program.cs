@@ -91,6 +91,7 @@ namespace MemoryAllocation
                         //add new process in pos (starting address) 
                         nprocess.setstarting_add(startaddress);
                         memory.Add(nprocess);
+                        memory.Remove(newprocess);
                         //add new hole in pos start address+size of process its size equals ( old hole size - new process size)
                         hole nhole = new hole((startaddress + nprocess.getsize()), (size - nprocess.getsize()));
                         memory.Add(nhole);
@@ -127,6 +128,7 @@ namespace MemoryAllocation
                         //add new process in pos (starting address) 
                         nprocess.setstarting_add(startaddress);
                         memory.Add(nprocess);
+                        memory.Remove(newprocess);
                         //add new hole in pos start address+size of process its size equals ( old hole size - new process size)
                         hole nhole = new hole((startaddress + nprocess.getsize()), (size - nprocess.getsize()));
                         memory.Add(nhole);
@@ -161,6 +163,7 @@ namespace MemoryAllocation
                         //add new process in pos (starting address) 
                         nprocess.setstarting_add(startaddress);
                         memory.Add(nprocess);
+                        memory.Remove(newprocess);
                         //add new hole in pos start address+size of process its size equals ( old hole size - new process size)
                         hole nhole = new hole((startaddress + nprocess.getsize()), (size - nprocess.getsize()));
                         memory.Add(nhole);
@@ -252,3 +255,4 @@ namespace MemoryAllocation
         }
     }
 }
+ 
