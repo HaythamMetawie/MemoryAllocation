@@ -36,7 +36,7 @@ namespace MemoryAllocation
     };
     class methodology
     {
-        public static void concatenate(List<memoryitem> L)
+        public static void concatenate(List<memoryitem> L) // approved
         {
             List<memoryitem> temp = L;
             List<memoryitem> holes = new List<memoryitem>();
@@ -75,7 +75,7 @@ namespace MemoryAllocation
             // check holes 
             memory.Add(hole);
         }
-        public static List<memoryitem> FirstFit(process newprocess, List<memoryitem> memory)
+        public static List<memoryitem> FirstFit(process newprocess, List<memoryitem> memory) //approved
         {
             process nprocess = newprocess;
 
@@ -83,7 +83,7 @@ namespace MemoryAllocation
             {
                 if (item.type == "h")
                 {
-                    if (item.size > newprocess.size)
+                    if (item.size >= newprocess.size)
                     {
                         //get el starting address w el size  
                         int startaddress = item.getstratingadd();
@@ -104,22 +104,22 @@ namespace MemoryAllocation
                 }
 
             }
-            
+            concatenate(memory);
             return memory;
-        }
+        } 
 
         public static List<memoryitem> BestFit(process newprocess,List<memoryitem>memory)
         {
             process nprocess = newprocess;
             List<memoryitem> temp = memory;
-            
+            temp.OrderBy(a => a.getsize());
+
             foreach (var item in temp)
             {
-                temp.OrderBy(a => a.getsize());
 
                 if (item.type == "h")
                 {   
-                    if (item.size > newprocess.size)
+                    if (item.size >= newprocess.size)
                     {
                         //get el starting address w el size  
                         int startaddress = item.getstratingadd();
@@ -140,10 +140,11 @@ namespace MemoryAllocation
 
             }
 
+            concatenate(memory);
             return memory;
         }
 
-        public static List<memoryitem> WorstFit(process newprocess,List<memoryitem>memory)
+        public static List<memoryitem> WorstFit(process newprocess,List<memoryitem>memory) //approved
         {
             process nprocess = newprocess;
             List<memoryitem> temp = memory;
@@ -152,7 +153,7 @@ namespace MemoryAllocation
             {
                 if (item.type == "h")
                 {
-                    if (item.size > newprocess.size)
+                    if (item.size >= newprocess.size)
                     {
                         //get el starting address w el size  
                         int startaddress = item.getstratingadd();
@@ -172,7 +173,7 @@ namespace MemoryAllocation
                 }
 
             }
-
+            concatenate(memory);
             return memory;
         }
         public static List<memoryitem> deallocate(string processname,List<memoryitem>memory)
@@ -189,15 +190,11 @@ namespace MemoryAllocation
                     allprocess.Remove(item);
                     hole nhole =new hole((address),(size));
                     memory.Add(nhole);
-                    
-                    //call the concatenation function
-                    concatenate(memory);
-
-                    break;
+                   break;
                 }
 
             }
-            
+            concatenate(memory);
             return memory;
         }
     };
@@ -221,20 +218,27 @@ namespace MemoryAllocation
             List<memoryitem> x = new List<memoryitem>();
             x.Add(h1); x.Add(h2); x.Add(h3); x.Add(h4); x.Add(p1); x.Add(p2); x.Add(p3); x.Add(p4); x.Add(p5); x.Add(p6);
 
-            MemoryAllocation.methodology.FirstFit(p1, x);
-            MemoryAllocation.methodology.FirstFit(p2, x);
-            MemoryAllocation.methodology.FirstFit(p3, x);
-            MemoryAllocation.methodology.FirstFit(p4, x);
-            MemoryAllocation.methodology.FirstFit(p5, x);
-            MemoryAllocation.methodology.FirstFit(p6, x);
-            MemoryAllocation.methodology.deallocate("p4", x);
+            //MemoryAllocation.methodology.FirstFit(p1, x);
+            //MemoryAllocation.methodology.FirstFit(p2, x);
+            //MemoryAllocation.methodology.FirstFit(p3, x);
+            //MemoryAllocation.methodology.FirstFit(p4, x);
+            //MemoryAllocation.methodology.FirstFit(p5, x);
+            //MemoryAllocation.methodology.FirstFit(p6, x);
+            //MemoryAllocation.methodology.deallocate("p4", x);
 
-            //MemoryAllocation.methodology.BestFit(p1, x);
-            //MemoryAllocation.methodology.BestFit(p2, x);
-            //MemoryAllocation.methodology.BestFit(p3, x);
-            //MemoryAllocation.methodology.BestFit(p4, x);
-            //MemoryAllocation.methodology.BestFit(p5, x);
-            //MemoryAllocation.methodology.BestFit(p6, x);
+            MemoryAllocation.methodology.BestFit(p1, x);
+            MemoryAllocation.methodology.BestFit(p2, x);
+            MemoryAllocation.methodology.BestFit(p3, x);
+            MemoryAllocation.methodology.BestFit(p4, x);
+            MemoryAllocation.methodology.BestFit(p5, x);
+            MemoryAllocation.methodology.BestFit(p6, x);
+
+            //MemoryAllocation.methodology.WorstFit(p1, x);
+            //MemoryAllocation.methodology.WorstFit(p2, x);
+            //MemoryAllocation.methodology.WorstFit(p3, x);
+            //MemoryAllocation.methodology.WorstFit(p4, x);
+            //MemoryAllocation.methodology.WorstFit(p5, x);
+            //MemoryAllocation.methodology.WorstFit(p6, x);
            
             foreach (var item in x)
             {
