@@ -6,3 +6,5 @@ Bestfit feh bug (by-allocate P4 fe starting address 300 elmafrod fe starting add
 Worstfit sha3'al tmam
 
 concatenation btsht3'l fe kol 7ta m3ada de-allocation :v
+
+ana zwedt memory.Remove(newprocess)
